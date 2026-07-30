@@ -1,0 +1,16 @@
+bin/
+obj/
+publish/
+artifacts/
+
+*.user
+*.suo
+.vs/
+.vscode/
+.idea/
+
+.DS_Store
+
+# Captures and exports are data, not source.
+*.tsr
+*.csv

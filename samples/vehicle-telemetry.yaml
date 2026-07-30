@@ -1,0 +1,91 @@
+# Noktra Telemetry Scope — example channel definition
+#
+# A length-field framed telemetry stream of the shape a small vehicle or test rig produces.
+# Every number the scope shows is derived from this file: nothing about the wire is hard-coded.
+
+name: Vehicle telemetry
+
+source:
+  type: udp
+  host: 0.0.0.0
+  port: 5005
+
+framing:
+  mode: lengthField
+  headerLength: 2       # bytes needed before the length can be read
+  lengthOffset: 1       # the length field sits right after the sync byte
+  lengthSize: 1
+  adjust: 2             # the length counts the payload only, so add the header back
+  maxFrameLength: 256
+
+channels:
+  - name: Airspeed
+    offset: 2
+    type: u16
+    endian: big
+    a: 0.1
+    unit: m/s
+    min: 0
+    max: 120
+
+  - name: Altitude
+    offset: 4
+    type: s16
+    endian: big
+    a: 0.5
+    unit: m
+    min: -100
+    max: 3000
+
+  - name: Heading
+    offset: 6
+    type: u16
+    endian: big
+    a: 0.01
+    unit: deg
+    min: 0
+    max: 360
+
+  - name: Battery
+    offset: 8
+    type: u16
+    endian: big
+    a: 0.001
+    unit: V
+    min: 18
+    max: 26
+
+  - name: Pack current
+    offset: 10
+    type: s16
+    endian: big
+    a: 0.01
+    unit: A
+    min: -40
+    max: 90
+
+  - name: Motor temp
+    offset: 12
+    type: s16
+    endian: big
+    a: 0.1
+    unit: degC
+    min: -20
+    max: 110
+
+  - name: Vibration
+    offset: 14
+    type: f32
+    endian: big
+    unit: g
+    min: 0
+    max: 6
+
+  - name: Loop current
+    offset: 18
+    type: u16
+    endian: big
+    a: 0.001
+    unit: mA
+    min: 4
+    max: 20

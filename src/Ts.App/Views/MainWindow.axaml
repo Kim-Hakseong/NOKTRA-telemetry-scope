@@ -1,0 +1,496 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Ts.App.ViewModels"
+        xmlns:controls="using:Ts.App.Controls"
+        x:Class="Ts.App.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Title="Noktra Telemetry Scope"
+        Width="1440" Height="900"
+        MinWidth="1120" MinHeight="720"
+        RequestedThemeVariant="Light">
+
+  <Window.Styles>
+    <StyleInclude Source="avares://Ts.App/Theme/NoktraStyles.axaml" />
+
+    <!-- Controls, flattened to instrument furniture rather than Fluent chrome. -->
+
+    <Style Selector="Button">
+      <Setter Property="Background" Value="{StaticResource NoktraPanelSunk}" />
+      <Setter Property="Foreground" Value="{StaticResource NoktraInkSoft}" />
+      <Setter Property="BorderBrush" Value="{StaticResource NoktraLine}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="CornerRadius" Value="5" />
+      <Setter Property="Padding" Value="11,5" />
+      <Setter Property="FontSize" Value="11" />
+      <Setter Property="FontWeight" Value="Medium" />
+    </Style>
+    <Style Selector="Button:pointerover /template/ ContentPresenter">
+      <Setter Property="Background" Value="{StaticResource NoktraAccentWash}" />
+      <Setter Property="BorderBrush" Value="{StaticResource NoktraAccent}" />
+    </Style>
+    <Style Selector="Button:disabled /template/ ContentPresenter">
+      <Setter Property="Opacity" Value="0.45" />
+    </Style>
+
+    <Style Selector="Button.primary">
+      <Setter Property="Background" Value="{StaticResource NoktraAccent}" />
+      <Setter Property="Foreground" Value="{StaticResource NoktraOnInk}" />
+      <Setter Property="BorderBrush" Value="{StaticResource NoktraAccent}" />
+    </Style>
+    <Style Selector="Button.primary:pointerover /template/ ContentPresenter">
+      <Setter Property="Background" Value="{StaticResource NoktraAccentBright}" />
+      <Setter Property="BorderBrush" Value="{StaticResource NoktraAccentBright}" />
+      <Setter Property="TextBlock.Foreground" Value="{StaticResource NoktraOnInk}" />
+    </Style>
+
+    <Style Selector="TextBox">
+      <Setter Property="Background" Value="{StaticResource NoktraPanelSunk}" />
+      <Setter Property="Foreground" Value="{StaticResource NoktraInk}" />
+      <Setter Property="BorderBrush" Value="{StaticResource NoktraLine}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="CornerRadius" Value="4" />
+      <Setter Property="Padding" Value="7,3" />
+      <Setter Property="FontSize" Value="11" />
+      <Setter Property="MinHeight" Value="0" />
+      <Setter Property="SelectionBrush" Value="{StaticResource NoktraAccentWash}" />
+      <Setter Property="CaretBrush" Value="{StaticResource NoktraAccent}" />
+    </Style>
+
+    <Style Selector="ComboBox">
+      <Setter Property="Background" Value="{StaticResource NoktraPanelSunk}" />
+      <Setter Property="Foreground" Value="{StaticResource NoktraInk}" />
+      <Setter Property="BorderBrush" Value="{StaticResource NoktraLine}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="CornerRadius" Value="4" />
+      <Setter Property="Padding" Value="7,3" />
+      <Setter Property="FontSize" Value="11" />
+      <Setter Property="MinHeight" Value="0" />
+    </Style>
+
+    <!--
+      Fluent's checkbox and slider arrive in the system accent, which fights the one accent this
+      palette allows. Both are re-tinted rather than restyled: the shapes are fine, the colours
+      were the problem.
+    -->
+    <Style Selector="CheckBox">
+      <Setter Property="MinWidth" Value="0" />
+      <Setter Property="Padding" Value="0" />
+    </Style>
+    <Style Selector="CheckBox /template/ Border#NormalRectangle">
+      <Setter Property="Width" Value="15" />
+      <Setter Property="Height" Value="15" />
+      <Setter Property="CornerRadius" Value="3" />
+      <Setter Property="Background" Value="{StaticResource NoktraPanelSunk}" />
+      <Setter Property="BorderBrush" Value="{StaticResource NoktraLine}" />
+    </Style>
+    <Style Selector="CheckBox:checked /template/ Border#NormalRectangle">
+      <Setter Property="Background" Value="{StaticResource NoktraAccent}" />
+      <Setter Property="BorderBrush" Value="{StaticResource NoktraAccent}" />
+    </Style>
+    <Style Selector="CheckBox:checked /template/ Path#CheckGlyph">
+      <Setter Property="Fill" Value="{StaticResource NoktraOnInk}" />
+      <Setter Property="Stroke" Value="{StaticResource NoktraOnInk}" />
+    </Style>
+
+    <Style Selector="Slider /template/ Track#PART_Track RepeatButton#PART_DecreaseButton /template/ Border">
+      <Setter Property="Background" Value="{StaticResource NoktraAccent}" />
+    </Style>
+    <Style Selector="Slider /template/ Track#PART_Track RepeatButton#PART_IncreaseButton /template/ Border">
+      <Setter Property="Background" Value="{StaticResource NoktraLine}" />
+    </Style>
+    <Style Selector="Slider /template/ Thumb">
+      <Setter Property="Background" Value="{StaticResource NoktraInk}" />
+      <Setter Property="BorderBrush" Value="{StaticResource NoktraInk}" />
+      <Setter Property="Width" Value="13" />
+      <Setter Property="Height" Value="13" />
+    </Style>
+
+    <Style Selector="ListBox">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="BorderThickness" Value="0" />
+      <Setter Property="Padding" Value="0" />
+    </Style>
+    <Style Selector="ListBoxItem">
+      <Setter Property="Padding" Value="7,5" />
+      <Setter Property="CornerRadius" Value="6" />
+      <Setter Property="Margin" Value="0,0,0,2" />
+    </Style>
+    <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
+      <Setter Property="Background" Value="{StaticResource NoktraPanelSunk}" />
+    </Style>
+    <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
+      <Setter Property="Background" Value="{StaticResource NoktraLineFaint}" />
+    </Style>
+
+    <Style Selector="Slider">
+      <Setter Property="MinHeight" Value="0" />
+    </Style>
+
+    <Style Selector="ScrollViewer">
+      <Setter Property="Background" Value="Transparent" />
+    </Style>
+  </Window.Styles>
+
+  <DockPanel>
+    <DockPanel.Background>
+      <LinearGradientBrush StartPoint="0%,0%" EndPoint="30%,100%">
+        <GradientStop Offset="0" Color="{StaticResource NoktraCanvasTop}" />
+        <GradientStop Offset="1" Color="{StaticResource NoktraCanvasBottom}" />
+      </LinearGradientBrush>
+    </DockPanel.Background>
+
+    <!-- Header -->
+    <Grid DockPanel.Dock="Top" Margin="20,14,20,10" ColumnDefinitions="Auto,Auto,Auto,*,Auto">
+
+      <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="9" VerticalAlignment="Center">
+        <Border Classes="chip" Width="24" Height="24" CornerRadius="6" Padding="0">
+          <TextBlock Text="N" FontSize="12" FontWeight="Bold"
+                     Foreground="{StaticResource NoktraOnInk}"
+                     HorizontalAlignment="Center" VerticalAlignment="Center" />
+        </Border>
+        <StackPanel VerticalAlignment="Center">
+          <TextBlock Text="NOKTRA" FontSize="12" FontWeight="Bold" LetterSpacing="3"
+                     Foreground="{StaticResource NoktraInk}" />
+          <TextBlock Classes="micro" Text="TELEMETRY SCOPE" Margin="0,1,0,0" />
+        </StackPanel>
+      </StackPanel>
+
+      <Border Grid.Column="1" Classes="chip-outline" Margin="26,0,0,0" VerticalAlignment="Center">
+        <TextBlock Classes="micro micro-ink" Text="{Binding DefinitionName}" />
+      </Border>
+
+      <Border Grid.Column="2" Classes="chip" Margin="7,0,0,0" VerticalAlignment="Center"
+              IsVisible="{Binding HasDefinition}">
+        <TextBlock Classes="micro micro-onink" Text="{Binding FramingSummary}" />
+      </Border>
+
+      <StackPanel Grid.Column="4" Orientation="Horizontal" Spacing="7" VerticalAlignment="Center">
+        <Button Content="Open definition" Command="{Binding OpenDefinitionCommand}" />
+        <Button Content="Open recording" Command="{Binding OpenRecordingCommand}" />
+      </StackPanel>
+    </Grid>
+
+    <!-- Legal bar -->
+    <Border DockPanel.Dock="Bottom" Background="{StaticResource NoktraLegalBar}" Padding="20,7">
+      <Grid ColumnDefinitions="Auto,*,Auto">
+        <TextBlock Grid.Column="0" Classes="micro micro-ink" VerticalAlignment="Center"
+                   Text="{Binding StatusMessage}" />
+        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+          <TextBlock Classes="micro" Text="OFFLINE · LOCAL ONLY" Margin="0,0,16,0"
+                     VerticalAlignment="Center" />
+          <TextBlock Text="Noktra" FontFamily="serif" FontSize="14" FontWeight="Bold"
+                     Foreground="#262623" VerticalAlignment="Center" />
+          <TextBlock Text=" Telemetry Scope" FontFamily="serif" FontSize="14"
+                     Foreground="#8B8B84" VerticalAlignment="Center" />
+        </StackPanel>
+      </Grid>
+    </Border>
+
+    <Grid Margin="20,0,20,12" ColumnDefinitions="308,12,*,12,306">
+
+      <!-- Channels -->
+      <Border Grid.Column="0" Classes="panel">
+        <Grid RowDefinitions="Auto,Auto,*,Auto,Auto" Margin="14,12,14,12">
+
+          <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
+            <TextBlock Grid.Column="0" Classes="micro micro-ink" Text="CHANNELS" />
+            <TextBlock Grid.Column="1" Classes="micro" Text="{Binding Channels.Count}" />
+          </Grid>
+          <Rectangle Grid.Row="1" Classes="rule" Margin="0,9,0,8" />
+
+          <ListBox Grid.Row="2" ItemsSource="{Binding Channels}"
+                   SelectedItem="{Binding SelectedChannel}">
+            <ListBox.ItemTemplate>
+              <DataTemplate x:DataType="vm:ChannelViewModel">
+                <Grid ColumnDefinitions="Auto,Auto,*,Auto" RowDefinitions="Auto,Auto">
+
+                  <CheckBox Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"
+                            IsChecked="{Binding IsTraceVisible}"
+                            VerticalAlignment="Center" Margin="0,0,7,0" />
+
+                  <Border Grid.Row="0" Grid.RowSpan="2" Grid.Column="1"
+                          Width="3" CornerRadius="2" Margin="0,1,8,1"
+                          Background="{Binding SwatchBrush}" />
+
+                  <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding Name}"
+                             FontSize="12" FontWeight="Medium"
+                             Foreground="{StaticResource NoktraInk}"
+                             TextTrimming="CharacterEllipsis" />
+
+                  <TextBlock Grid.Row="1" Grid.Column="2" Classes="micro"
+                             Text="{Binding OriginLabel}" Margin="0,2,0,0" />
+
+                  <StackPanel Grid.Row="0" Grid.RowSpan="2" Grid.Column="3"
+                              VerticalAlignment="Center" HorizontalAlignment="Right">
+                    <TextBlock Classes="readout" Text="{Binding ValueText}"
+                               HorizontalAlignment="Right"
+                               FontWeight="Medium" />
+                    <Border Classes="chip chip-alert" Margin="0,3,0,0" Padding="5,1"
+                            HorizontalAlignment="Right"
+                            IsVisible="{Binding IsViolating}">
+                      <TextBlock Classes="micro" Text="{Binding StatusText}"
+                                 Foreground="{StaticResource NoktraOnInk}" />
+                    </Border>
+                  </StackPanel>
+                </Grid>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+
+          <Rectangle Grid.Row="3" Classes="rule" Margin="0,8,0,8" />
+
+          <Grid Grid.Row="4" ColumnDefinitions="Auto,Auto,*">
+            <Button Grid.Column="0" Content="Show all" Command="{Binding ShowAllChannelsCommand}" />
+            <Button Grid.Column="1" Content="Hide all" Margin="6,0,0,0"
+                    Command="{Binding HideAllChannelsCommand}" />
+            <TextBlock Grid.Column="2" Classes="micro" Text="{Binding CursorCaption}"
+                       HorizontalAlignment="Right" VerticalAlignment="Center" />
+          </Grid>
+        </Grid>
+      </Border>
+
+      <!-- Scope -->
+      <Border Grid.Column="2" Classes="panel">
+        <Grid RowDefinitions="Auto,Auto,*,Auto,Auto" Margin="16,12,16,14">
+
+          <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto,Auto,Auto">
+            <TextBlock Grid.Column="0" Classes="micro micro-ink" Text="STRIP CHART"
+                       VerticalAlignment="Center" />
+
+            <TextBlock Grid.Column="2" Classes="micro" Text="WINDOW" Margin="0,0,7,0"
+                       VerticalAlignment="Center" />
+            <ComboBox Grid.Column="3" Width="86" ItemsSource="{Binding TimeWindows}"
+                      SelectedIndex="{Binding TimeWindowIndex}" />
+            <Button Grid.Column="4" Margin="7,0,0,0" Content="Freeze"
+                    Command="{Binding ToggleFreezeCommand}" />
+          </Grid>
+
+          <Rectangle Grid.Row="1" Classes="rule" Margin="0,9,0,10" />
+
+          <Grid Grid.Row="2">
+            <controls:StripChart x:Name="Chart" />
+            <Border Classes="chip chip-accent" Margin="0,10,10,0" Padding="7,2"
+                    HorizontalAlignment="Right" VerticalAlignment="Top"
+                    IsVisible="{Binding IsFrozen}">
+              <TextBlock Classes="micro" Text="FROZEN" Foreground="{StaticResource NoktraOnInk}" />
+            </Border>
+          </Grid>
+
+          <!--
+            Statistics for the selected channel, over the visible window. They sit under the plot
+            rather than in the channel list because they answer a question about one curve, and
+            the dark rows are the element that says "this is a measurement, not a control".
+          -->
+          <StackPanel Grid.Row="3" Margin="0,12,0,0" DataContext="{Binding SelectedChannel}"
+                      IsVisible="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).HasDefinition}">
+            <Grid ColumnDefinitions="Auto,Auto,*,Auto">
+              <TextBlock Grid.Column="0" Classes="micro micro-ink" Text="READOUT"
+                         VerticalAlignment="Center" />
+              <Border Grid.Column="1" Classes="chip" Margin="9,0,0,0" Padding="7,2">
+                <TextBlock Classes="micro micro-onink" Text="{Binding Name}" />
+              </Border>
+              <TextBlock Grid.Column="2" Classes="micro" Margin="9,0,0,0" VerticalAlignment="Center"
+                         Text="{Binding RangeLabel, StringFormat='VALID {0}'}" />
+              <Button Grid.Column="3"
+                      Content="Export window CSV"
+                      Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).ExportWindowCommand}" />
+            </Grid>
+
+            <Grid Margin="0,8,0,0" ColumnDefinitions="*,6,*,6,*,6,*,6,*,6,*">
+              <Border Grid.Column="0" Classes="statrow" Margin="0">
+                <StackPanel>
+                  <TextBlock Classes="micro micro-onink" Text="CURRENT" />
+                  <TextBlock Classes="readout-onink" Text="{Binding ValueText}" Margin="0,3,0,0" />
+                </StackPanel>
+              </Border>
+              <Border Grid.Column="2" Classes="statrow" Margin="0">
+                <StackPanel>
+                  <TextBlock Classes="micro micro-onink" Text="MIN" />
+                  <TextBlock Classes="readout-onink" Text="{Binding MinText}" Margin="0,3,0,0" />
+                </StackPanel>
+              </Border>
+              <Border Grid.Column="4" Classes="statrow" Margin="0">
+                <StackPanel>
+                  <TextBlock Classes="micro micro-onink" Text="MAX" />
+                  <TextBlock Classes="readout-onink" Text="{Binding MaxText}" Margin="0,3,0,0" />
+                </StackPanel>
+              </Border>
+              <Border Grid.Column="6" Classes="statrow" Margin="0">
+                <StackPanel>
+                  <TextBlock Classes="micro micro-onink" Text="MEAN" />
+                  <TextBlock Classes="readout-onink" Text="{Binding MeanText}" Margin="0,3,0,0" />
+                </StackPanel>
+              </Border>
+              <Border Grid.Column="8" Classes="statrow" Margin="0">
+                <StackPanel>
+                  <TextBlock Classes="micro micro-onink" Text="SAMPLES" />
+                  <TextBlock Classes="readout-onink" Text="{Binding SampleCount}" Margin="0,3,0,0" />
+                </StackPanel>
+              </Border>
+              <Border Grid.Column="10" Classes="statrow" Margin="0">
+                <StackPanel>
+                  <TextBlock Classes="micro micro-onink" Text="OUT OF RANGE" />
+                  <TextBlock Classes="readout-onink" Text="{Binding WindowViolationCount}"
+                             Margin="0,3,0,0" />
+                </StackPanel>
+              </Border>
+            </Grid>
+          </StackPanel>
+
+          <Grid Grid.Row="4" Margin="0,10,0,0" ColumnDefinitions="Auto,*,Auto">
+            <TextBlock Grid.Column="0" Classes="micro"
+                       Text="MIN/MAX ENVELOPE DECIMATION · NO SAMPLE DISCARDED" />
+            <TextBlock Grid.Column="2" Classes="micro micro-accent" Text="{Binding RateText}" />
+          </Grid>
+        </Grid>
+      </Border>
+
+      <!-- Session -->
+      <Border Grid.Column="4" Classes="panel">
+        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,*" Margin="14,12,14,12">
+
+          <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
+            <TextBlock Grid.Column="0" Classes="micro micro-ink" Text="SOURCE" />
+            <TextBlock Grid.Column="1" Classes="micro micro-accent" Text="{Binding SourceDescription}" />
+          </Grid>
+
+          <StackPanel Grid.Row="1" Margin="0,8,0,0">
+            <Grid ColumnDefinitions="86,*">
+              <ComboBox Grid.Column="0" ItemsSource="{Binding SourceKinds}"
+                        SelectedIndex="{Binding SourceKindIndex}"
+                        IsEnabled="{Binding !IsReceiving}" />
+
+              <!-- UDP -->
+              <Grid Grid.Column="1" Margin="6,0,0,0" ColumnDefinitions="*,74"
+                    IsVisible="{Binding IsUdpSource}">
+                <TextBox Grid.Column="0" Text="{Binding UdpHost}" Watermark="0.0.0.0"
+                         IsEnabled="{Binding !IsReceiving}" />
+                <TextBox Grid.Column="1" Margin="6,0,0,0" Text="{Binding UdpPort}" Watermark="port"
+                         IsEnabled="{Binding !IsReceiving}" />
+              </Grid>
+
+              <!-- Serial -->
+              <Grid Grid.Column="1" Margin="6,0,0,0" ColumnDefinitions="*,90,Auto"
+                    IsVisible="{Binding IsSerialSource}">
+                <ComboBox Grid.Column="0" ItemsSource="{Binding SerialPorts}"
+                          SelectedItem="{Binding SelectedSerialPort}"
+                          IsEnabled="{Binding !IsReceiving}" />
+                <ComboBox Grid.Column="1" Margin="6,0,0,0" ItemsSource="{Binding BaudRates}"
+                          SelectedIndex="{Binding BaudRateIndex}"
+                          IsEnabled="{Binding !IsReceiving}" />
+                <Button Grid.Column="2" Margin="6,0,0,0" Content="↻"
+                        Command="{Binding RefreshSerialPortsCommand}"
+                        IsEnabled="{Binding !IsReceiving}" />
+              </Grid>
+            </Grid>
+
+            <Grid Margin="0,8,0,0" ColumnDefinitions="Auto,Auto,*">
+              <Button Grid.Column="0" Classes="primary" Content="{Binding ConnectLabel}"
+                      Command="{Binding ConnectCommand}" IsEnabled="{Binding HasDefinition}" />
+              <Button Grid.Column="1" Margin="6,0,0,0" Content="{Binding RecordLabel}"
+                      Command="{Binding ToggleRecordingCommand}" IsEnabled="{Binding HasDefinition}" />
+              <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right"
+                          VerticalAlignment="Center" IsVisible="{Binding IsRecording}">
+                <Ellipse Width="7" Height="7" Fill="{StaticResource NoktraAlert}"
+                         VerticalAlignment="Center" Margin="0,0,5,0" />
+                <TextBlock Classes="micro micro-alert" Text="{Binding RecordingTarget}" />
+              </StackPanel>
+            </Grid>
+          </StackPanel>
+
+          <Rectangle Grid.Row="2" Classes="rule" Margin="0,10,0,10" />
+
+          <TextBlock Grid.Row="3" Classes="micro micro-ink" Text="SESSION" />
+
+          <StackPanel Grid.Row="4" Margin="0,9,0,0">
+            <Border Classes="statrow">
+              <Grid ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0" Classes="micro micro-onink" Text="FRAMES"
+                           VerticalAlignment="Center" />
+                <TextBlock Grid.Column="1" Classes="readout-onink" Text="{Binding FrameCountText}" />
+              </Grid>
+            </Border>
+            <Border Classes="statrow">
+              <Grid ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0" Classes="micro micro-onink" Text="BYTES"
+                           VerticalAlignment="Center" />
+                <TextBlock Grid.Column="1" Classes="readout-onink" Text="{Binding ByteCountText}" />
+              </Grid>
+            </Border>
+            <Border Classes="statrow">
+              <Grid ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0" Classes="micro micro-onink" Text="RANGE VIOLATIONS"
+                           VerticalAlignment="Center" />
+                <TextBlock Grid.Column="1" Classes="readout-onink" Text="{Binding ViolationText}" />
+              </Grid>
+            </Border>
+            <Border Classes="statrow">
+              <Grid ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0" Classes="micro micro-onink" Text="DROPPED"
+                           VerticalAlignment="Center" />
+                <TextBlock Grid.Column="1" Classes="readout-onink" Text="{Binding DroppedText}" />
+              </Grid>
+            </Border>
+            <Border Classes="statrow">
+              <Grid ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0" Classes="micro micro-onink" Text="RESYNC DISCARDS"
+                           VerticalAlignment="Center" />
+                <TextBlock Grid.Column="1" Classes="readout-onink" Text="{Binding DiscardedText}" />
+              </Grid>
+            </Border>
+          </StackPanel>
+
+          <Rectangle Grid.Row="5" Classes="rule" Margin="0,10,0,10" />
+
+          <!-- Replay -->
+          <StackPanel Grid.Row="6">
+            <Grid ColumnDefinitions="*,Auto">
+              <TextBlock Grid.Column="0" Classes="micro micro-ink" Text="REPLAY" />
+              <TextBlock Grid.Column="1" Classes="micro micro-accent"
+                         Text="{Binding ReplayStateLabel}" />
+            </Grid>
+
+            <Border Classes="sunk" Margin="0,8,0,0" Padding="9,7">
+              <StackPanel>
+                <TextBlock Text="{Binding RecordingName}" FontSize="12" FontWeight="Medium"
+                           Foreground="{StaticResource NoktraInk}"
+                           TextTrimming="CharacterEllipsis" />
+                <TextBlock Classes="micro" Text="{Binding RecordingSummary}" Margin="0,3,0,0" />
+              </StackPanel>
+            </Border>
+
+            <Grid Margin="0,9,0,0" ColumnDefinitions="Auto,Auto,*,Auto,Auto">
+              <Button Grid.Column="0" Classes="primary" Content="Play / Pause"
+                      Command="{Binding PlayPauseCommand}" IsEnabled="{Binding HasRecording}" />
+              <Button Grid.Column="1" Margin="6,0,0,0" Content="Stop"
+                      Command="{Binding StopReplayCommand}" IsEnabled="{Binding HasRecording}" />
+              <TextBlock Grid.Column="3" Classes="micro" Text="SPEED" Margin="0,0,6,0"
+                         VerticalAlignment="Center" />
+              <ComboBox Grid.Column="4" Width="72" ItemsSource="{Binding SpeedLabels}"
+                        SelectedIndex="{Binding SpeedIndex}" IsEnabled="{Binding HasRecording}" />
+            </Grid>
+
+            <Slider Margin="0,9,0,0" Minimum="0" Maximum="{Binding DurationSeconds}"
+                    Value="{Binding PositionSeconds}" IsEnabled="{Binding HasRecording}" />
+          </StackPanel>
+
+          <Rectangle Grid.Row="7" Classes="rule" Margin="0,10,0,10" />
+
+          <Grid Grid.Row="8">
+            <TextBlock Classes="ghost" Text="SCOPE" HorizontalAlignment="Left"
+                       VerticalAlignment="Bottom" Margin="-4,0,0,-12" />
+            <StackPanel VerticalAlignment="Top">
+              <TextBlock Classes="micro micro-ink" Text="DEFINITION" />
+              <TextBlock Classes="micro micro-accent" Text="{Binding DefinitionOrigin}"
+                         Margin="0,6,0,0" />
+              <TextBlock Classes="readout" Text="{Binding DefinitionPath}" Margin="0,6,0,0"
+                         TextWrapping="Wrap" FontSize="10"
+                         ToolTip.Tip="{Binding DefinitionPath}"
+                         Foreground="{StaticResource NoktraMuted}" />
+            </StackPanel>
+          </Grid>
+        </Grid>
+      </Border>
+    </Grid>
+  </DockPanel>
+</Window>

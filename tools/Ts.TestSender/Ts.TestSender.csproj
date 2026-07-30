@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Ts.TestSender</RootNamespace>
+    <AssemblyName>Ts.TestSender</AssemblyName>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../../src/Ts.Core/Ts.Core.csproj" />
+  </ItemGroup>
+
+</Project>
